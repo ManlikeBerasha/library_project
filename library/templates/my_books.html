@@ -1,0 +1,82 @@
+{% extends 'library/base.html' %}
+
+{% block title %}My Books - Library{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>My Books</h2>
+    
+    <h3>Currently Borrowed</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in active_loans %}
+                <tr>
+                    <td><a href="{% url 'library:book-detail' record.book.pk %}">{{ record.book.title }}</a></td>
+                    <td>{{ record.borrow_date|date:"M d, Y" }}</td>
+                    <td>{{ record.due_date|date:"M d, Y" }}</td>
+                    <td>
+                        {% if record.is_overdue %}
+                            <span class="badge bg-danger">Overdue</span>
+                        {% else %}
+                            <span class="badge bg-success">Active</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'library:return-book' record.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">Return</button>
+                        </form>
+                        {% if not record.is_overdue %}
+                        <form method="post" action="{% url 'library:extend-borrow' record.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-secondary">Extend</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No books currently borrowed.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Borrowing History</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Borrowed</th>
+                    <th>Returned</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in return_history %}
+                <tr>
+                    <td><a href="{% url 'library:book-detail' record.book.pk %}">{{ record.book.title }}</a></td>
+                    <td>{{ record.borrow_date|date:"M d, Y" }}</td>
+                    <td>{{ record.return_date|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center">No borrowing history.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

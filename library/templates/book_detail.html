@@ -1,0 +1,56 @@
+div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card book-detail-card">
+                <div class="card-body">
+                    <h2 class="card-title">{{ book.title }}</h2>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        by {% for author in book.authors.all %}
+                            <a href="{% url 'library:author-detail' author.pk %}">{{ author.name }}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </h6>
+                    <p class="card-text">{{ book.description }}</p>
+                    <div class="book-details">
+                        <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                        <p><strong>Category:</strong> {{ book.category.name }}</p>
+                        <p><strong>Status:</strong> <span class="badge bg-{{ book.status|yesno:'success,danger' }}">
+                            {{ book.get_status_display }}</span></p>
+                        <p><strong>Available Copies:</strong> {{ book.available_copies }}/{{ book.total_copies }}</p>
+                    </div>
+                    {% if user.is_authenticated %}
+                        {% if book.is_available and not has_borrowed %}
+                            <form method="post" action="{% url 'library:borrow-book' book.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Borrow Book</button>
+                            </form>
+                        {% elif has_borrowed %}
+                            <p class="text-info">You currently have this book borrowed.</p>
+                        {% else %}
+                            <p class="text-danger">This book is currently unavailable.</p>
+                        {% endif %}
+                    {% else %}
+                        <p>Please <a href="{% url 'login' %}">login</a> to borrow this book.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card similar-books-card">
+                <div class="card-header">
+                    <h5>Similar Books</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                    {% for similar_book in similar_books %}
+                        <li class="mb-2">
+                            <a href="{% url 'library:book-detail' similar_book.pk %}">{{ similar_book.title }}</a>
+                        </li>
+                    {% empty %}
+                        <li>No similar books found.</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

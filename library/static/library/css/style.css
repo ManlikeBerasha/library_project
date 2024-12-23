@@ -1,0 +1,90 @@
+
+/* General Styles */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    margin-top: auto;
+}
+
+/* Card Styles */
+.card {
+    transition: transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Book List Styles */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.book-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-card .card-body {
+    flex: 1;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.status-available {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-borrowed {
+    background-color: #ffc107;
+    color: black;
+}
+
+.status-maintenance {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Search Box */
+.search-box {
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+/* Custom Button Styles */
+.btn-library {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.btn-library:hover {
+    background-color: #0052a3;
+    color: white;
+}
