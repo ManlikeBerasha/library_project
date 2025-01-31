@@ -37,7 +37,7 @@ class Book(models.Model):
     isbn = models.CharField('ISBN', max_length=13, unique=True)
     category = models.ForeignKey(Category, related_name='books', on_delete=models.SET_NULL, null=True)
     authors = models.ManyToManyField(Author, related_name='books')
-    description = models.TextField()
+    description = models.TextField()i
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
     total_copies = models.IntegerField(default=1)
     available_copies = models.IntegerField(default=1)
